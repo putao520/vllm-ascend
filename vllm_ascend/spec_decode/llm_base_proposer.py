@@ -55,7 +55,11 @@ from vllm_ascend.spec_decode.utils import SlidingWindowAdapter
 from vllm_ascend.utils import check_gdn_layer, enable_sp, lmhead_tp_enable, shared_expert_dp_enabled, vllm_version_is
 
 if not vllm_version_is("0.23.0"):
-    from vllm.model_executor.models.qwen3_dspark import Qwen3DSparkForCausalLM
+    try:
+        from vllm.model_executor.models.qwen3_dspark import Qwen3DSparkForCausalLM
+    except ModuleNotFoundError:
+        # qwen3_dspark model is absent in vllm 0.24.0 release wheel
+        Qwen3DSparkForCausalLM = None
 else:
     Qwen3DSparkForCausalLM = None
 
